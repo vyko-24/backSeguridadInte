@@ -2,7 +2,10 @@ package utez.edu.mx.basicauth8c.modules.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import utez.edu.mx.basicauth8c.modules.almacen.Almacen;
 import utez.edu.mx.basicauth8c.modules.rol.Rol;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -35,7 +38,63 @@ public class User {
     @JsonIgnoreProperties(value = {"usuario"})
     private Rol rol ;
 
+    @OneToMany(mappedBy = "encargado", cascade = CascadeType.ALL)
+    private Set<Almacen> almacenes;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
     public User() {
+    }
+
+    public Set<Almacen> getAlmacenes() {
+        return almacenes;
+    }
+
+    public void setAlmacenes(Set<Almacen> almacenes) {
+        this.almacenes = almacenes;
+    }
+
+    public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Set<Almacen> almacenes) {
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.almacenes = almacenes;
+    }
+
+    public User(Long id, String email, String nombre, String apellidos, String username, String password, Rol rol, Set<Almacen> almacenes) {
+        this.id = id;
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.almacenes = almacenes;
     }
 
     public User(String email, String nombre, String apellidos, String username, String password, Rol rol) {

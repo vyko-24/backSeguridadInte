@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import utez.edu.mx.basicauth8c.modules.user.UseRepository;
+import utez.edu.mx.basicauth8c.modules.user.UserRepository;
 import utez.edu.mx.basicauth8c.modules.user.User;
 import utez.edu.mx.basicauth8c.security.MainSecurity;
 
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Component
 public class AuthFilter extends OncePerRequestFilter {
     @Autowired
-    private UseRepository useRepository;
+    private UserRepository useRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

@@ -26,8 +26,30 @@ public class MainSecurity implements WebMvcConfigurer {
 
     private final static String[] WHITE_LIST ={
             "/api/test",
-            "/api/auth/login"
+            "/api/auth/login",
+            "/api/categoria/get/",
+            "/api/almacen/get/",
+            "/api/articulo/get/",
     };
+
+    private final static String[] ADMIN_LIST ={
+            "/api/user/**",
+            "/api/categoria/**",
+            "/api/articulo/**"
+    };
+    private final static String[] MERGE_LIST ={
+            "/api/almacen/**",
+            "/api/articulo/**"
+    };
+
+    public static String[] getMERGE_LIST() {
+        return MERGE_LIST;
+    }
+
+
+    public static String[] getADMIN_LIST() {
+        return ADMIN_LIST;
+    }
 
     public static String[] getWHITE_LIST() {
         return WHITE_LIST;
@@ -45,7 +67,8 @@ public class MainSecurity implements WebMvcConfigurer {
 
                         // BA07: Crear la configuracion de las rutas
                                 .requestMatchers(WHITE_LIST).permitAll()
-                                .requestMatchers("/api/test/secured").hasRole("ADMIN")
+                                .requestMatchers(MERGE_LIST).hasAnyRole("ADMIN", "RESPONSABLE")
+                                .requestMatchers(ADMIN_LIST).hasRole("ADMIN")
                                 .anyRequest().authenticated()
 
 

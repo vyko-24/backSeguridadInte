@@ -5,13 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
-import utez.edu.mx.basicauth8c.modules.user.UseRepository;
 import utez.edu.mx.basicauth8c.modules.user.User;
+import utez.edu.mx.basicauth8c.modules.user.UserRepository;
 
 @Service
 public class AuthService {
     @Autowired
-    private UseRepository useRepository;
+    private UserRepository useRepository;
 
     @Autowired
     private CustomResponse customResponse;
