@@ -53,7 +53,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 user = useRepository.findByUsername(token.split("\\.")[1]);
                 System.out.println("Verificando que el usuario exista");
                 if (user != null && token != null){
-                    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRol()));
+                    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+user.getRol().getNombre()));
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);

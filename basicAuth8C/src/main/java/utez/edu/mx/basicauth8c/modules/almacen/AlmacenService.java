@@ -86,7 +86,8 @@ public class AlmacenService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> createArticulo(Articulo articulo, Long idAlmacen) {
-        if (articulo.getId() != null && articuloRepository.existsById(articulo.getId()))
+        Optional<Articulo> foundArticulo = articuloRepository.findByNombre(articulo.getNombre());
+        if (foundArticulo.isPresent() && articuloRepository.existsById(foundArticulo.get().getId()))
             return customResponse.getBadRequest("Artículo ya registrado");
         Optional<Almacen> almacenFound = repository.findById(idAlmacen);
         if (almacenFound.isEmpty())

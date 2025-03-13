@@ -46,7 +46,6 @@ public class MainSecurity implements WebMvcConfigurer {
         return MERGE_LIST;
     }
 
-
     public static String[] getADMIN_LIST() {
         return ADMIN_LIST;
     }

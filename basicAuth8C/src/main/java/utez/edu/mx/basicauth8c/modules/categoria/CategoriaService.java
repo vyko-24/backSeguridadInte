@@ -30,7 +30,8 @@ public class CategoriaService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> save(Categoria categoria){
-        if (repository.findById(categoria.getId()).isPresent())
+        Optional<Categoria> foundCategoria = repository.findByNombre(categoria.getNombre());
+        if (foundCategoria.isPresent())
             return customResponse.getBadRequest("Categoria ya registrada");
         return customResponse.getJSONResponse(repository.save(categoria));
     }
