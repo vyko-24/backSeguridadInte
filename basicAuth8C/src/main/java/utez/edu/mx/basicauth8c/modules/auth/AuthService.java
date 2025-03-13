@@ -8,6 +8,8 @@ import utez.edu.mx.basicauth8c.kernel.CustomResponse;
 import utez.edu.mx.basicauth8c.modules.user.User;
 import utez.edu.mx.basicauth8c.modules.user.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
     @Autowired
@@ -22,5 +24,25 @@ public class AuthService {
         if (foundUser == null)
             return customResponse.get400Response(404);
         return customResponse.getOkResponse("bearertoken."+foundUser.getUsername()+".voidtoken");
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> regresarContrasena(Long id){
+        Optional<User> foundUser = useRepository.findById(id);
+        if (!foundUser.isPresent())
+            return customResponse.get400Response(404);
+        User user = foundUser.get();
+        user.setPassword(user.getUsername());
+        return customResponse.getJSONResponse(useRepository.save(user));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> updatePassword(Long id, String password){
+        Optional<User> foundUser = useRepository.findById(id);
+        if (!foundUser.isPresent())
+            return customResponse.get400Response(404);
+        User user = foundUser.get();
+        user.setPassword(password);
+        return customResponse.getJSONResponse(useRepository.save(user));
     }
 }

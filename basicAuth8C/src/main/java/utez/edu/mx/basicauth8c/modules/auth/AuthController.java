@@ -15,4 +15,14 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginDto dto){
        return authService.login(dto);
     }
+
+    @PutMapping("/regresarContrasena/{id}")
+    public ResponseEntity<?> recuperarContrasena(@PathVariable("id") Long id){
+        return authService.regresarContrasena(id);
+    }
+
+    @PutMapping("/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable("id") Long id, @RequestBody String password){
+        return authService.updatePassword(id, password);
+    }
 }

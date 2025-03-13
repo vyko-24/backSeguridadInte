@@ -27,19 +27,22 @@ public class MainSecurity implements WebMvcConfigurer {
     private final static String[] WHITE_LIST ={
             "/api/test",
             "/api/auth/login",
-            "/api/categoria/get/",
-            "/api/almacen/get/",
-            "/api/articulo/get/",
     };
 
     private final static String[] ADMIN_LIST ={
             "/api/user/**",
             "/api/categoria/**",
-            "/api/articulo/**"
+            "/api/articulo/**",
+            "/api/almacen/get/**",
+            "/api/almacen/save/",
+            "/api/almacen/update/**",
+            "/api/almacen/delete/**",
+            "/api/auth/regresarContrasena/**",
     };
     private final static String[] MERGE_LIST ={
-            "/api/almacen/**",
-            "/api/articulo/**"
+            "/api/almacen/createArticulo/**",
+            "/api/articulo/**",
+            "/api/auth/updatePassword/**",
     };
 
     public static String[] getMERGE_LIST() {
