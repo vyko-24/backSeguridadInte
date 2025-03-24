@@ -31,6 +31,14 @@ public class UserService {
         return response.getJSONResponse(repository.findById(id));
     }
 
+    @Transactional(readOnly = true)
+    public User findUserByUsername(String username) {
+        User foundUser = repository.findByUsername(username);
+        if (foundUser == null)
+            return null;
+        return foundUser;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> save(User user){
         if (repository.findByEmail(user.getEmail()).isPresent())

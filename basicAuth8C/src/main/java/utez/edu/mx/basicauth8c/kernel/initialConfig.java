@@ -2,6 +2,7 @@ package utez.edu.mx.basicauth8c.kernel;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.modules.almacen.Almacen;
 import utez.edu.mx.basicauth8c.modules.almacen.AlmacenRepository;
@@ -24,13 +25,15 @@ public class initialConfig implements CommandLineRunner {
     private final ArticuloRepository articuloRepository;
     private final AlmacenRepository almacenRepository;
     private final CategoriaRepository categoriaRepository;
+    private final PasswordEncoder encoder;
 
-    public initialConfig(RolRepository rolRepository, UserRepository userRepository, ArticuloRepository articuloRepository, AlmacenRepository almacenRepository, CategoriaRepository categoriaRepository) {
+    public initialConfig(RolRepository rolRepository, UserRepository userRepository, ArticuloRepository articuloRepository, AlmacenRepository almacenRepository, CategoriaRepository categoriaRepository, PasswordEncoder encoder) {
         this.rolRepository = rolRepository;
         this.userRepository = userRepository;
         this.articuloRepository = articuloRepository;
         this.almacenRepository = almacenRepository;
         this.categoriaRepository = categoriaRepository;
+        this.encoder = encoder;
     }
 
     @Transactional(rollbackFor = {SQLException.class})
@@ -88,8 +91,8 @@ public class initialConfig implements CommandLineRunner {
         Rol admin = getOrSaveRol(new Rol("ADMIN"));
         Rol responsable = getOrSaveRol(new Rol("RESPONSABLE"));
 
-        User userAdmin = getOrSaveUser(new User("admin@gmail.com","Víctor","Barrera","Viko","1234",admin));
-        User userResponsable = getOrSaveUser(new User( "responsable@gmail.com","Vale","Hernandez","Titian","1234",responsable));
+        User userAdmin = getOrSaveUser(new User("admin@gmail.com","Víctor","Barrera","Viko",encoder.encode("1234"),admin));
+        User userResponsable = getOrSaveUser(new User( "responsable@gmail.com","Vale","Hernandez","Titian",encoder.encode("1234"),responsable));
 
         Categoria categoria = getOrSaveCategoria(new Categoria("Electronica"));
         Articulo articulo1 = getOrSaveArticulo(new Articulo("Laptop","Laptop HP",categoria));
