@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
+import utez.edu.mx.basicauth8c.modules.almacen.Almacen;
 import utez.edu.mx.basicauth8c.modules.almacen.AlmacenRepository;
 
 import java.util.Optional;
@@ -23,6 +24,15 @@ public class ArticuloService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> getAll(){
         return customResponse.getJSONResponse(repository.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getByAlmacen(Long id){
+        Optional<Almacen> almacen = almacenRepository.findById(id);
+        if(almacen.isEmpty())
+            return customResponse.getBadRequest("Almacen no encontrado");
+        Almacen almacenAux = almacen.get();
+        return customResponse.getJSONResponse(repository.findByAlmacenes(almacenAux));
     }
 
     @Transactional(readOnly = true)

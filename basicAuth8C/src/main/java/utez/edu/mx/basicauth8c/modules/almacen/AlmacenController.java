@@ -21,6 +21,11 @@ public class AlmacenController {
         return almacenService.getById(id);
     }
 
+    @GetMapping("/get/encargado/{id}/")
+    public ResponseEntity<?> getByEncargado(@PathVariable("id") Long id){
+        return almacenService.getByEncargado(id);
+    }
+
     @PostMapping("/save/")
     public ResponseEntity<?> save(@RequestBody AlmacenDto almacen){
         return almacenService.save(almacen.toEntity());

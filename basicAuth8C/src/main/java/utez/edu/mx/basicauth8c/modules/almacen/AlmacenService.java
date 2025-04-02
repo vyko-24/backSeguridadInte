@@ -43,6 +43,15 @@ public class AlmacenService {
         return customResponse.getJSONResponse(repository.findById(id));
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<?> getByEncargado(Long id){
+        Optional<User> encargado = userRepository.findById(id);
+        if(encargado.isEmpty())
+            return customResponse.getBadRequest("Usuario no encontrado");
+        User encargadoAux = encargado.get();
+        return customResponse.getJSONResponse(repository.findByEncargado(encargadoAux));
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> save(Almacen almacen){
         if (repository.findByIdentificador(almacen.getIdentificador()).isPresent())
