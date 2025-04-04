@@ -24,7 +24,7 @@ public class Almacen {
     @JsonIgnoreProperties(value = {"articulo","almacen"})
     private Categoria categoria;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "encargado_id", nullable = false)
     @JsonIgnoreProperties(value = {"almacenes","password","rol"})
     private User encargado;

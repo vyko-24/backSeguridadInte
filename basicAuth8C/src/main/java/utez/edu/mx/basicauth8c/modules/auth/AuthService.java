@@ -37,6 +37,7 @@ public class AuthService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> login(LoginDto dto) {
         System.out.println("banana");
+        System.out.println(dto);
         try{
             User foundUser = useRepository.findByUsername(dto.getUsername());
             if (foundUser == null)
@@ -48,7 +49,7 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = provider.generateToken(auth);
             SignedDto signedDto = new SignedDto(token, "Bearer", foundUser, foundUser.getRol());
-            return customResponse.getOkResponse(signedDto);
+            return customResponse.getJSONResponse(signedDto);
         }catch (Exception e){
             e.printStackTrace();
             return customResponse.get400Response(400);

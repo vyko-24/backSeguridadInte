@@ -38,8 +38,8 @@ public class User {
     @JsonIgnoreProperties(value = {"usuario"})
     private Rol rol ;
 
-    @OneToMany(mappedBy = "encargado", cascade = CascadeType.ALL)
-    private Set<Almacen> almacenes;
+    @OneToOne(mappedBy = "encargado", cascade = CascadeType.ALL)
+    private Almacen almacen;
 
     public String getEmail() {
         return email;
@@ -68,25 +68,25 @@ public class User {
     public User() {
     }
 
-    public Set<Almacen> getAlmacenes() {
-        return almacenes;
+    public Almacen getAlmacenes() {
+        return almacen;
     }
 
-    public void setAlmacenes(Set<Almacen> almacenes) {
-        this.almacenes = almacenes;
+    public void setAlmacenes(Almacen almacenes) {
+        this.almacen = almacenes;
     }
 
-    public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Set<Almacen> almacenes) {
+    public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Almacen almacen) {
         this.email = email;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.username = username;
         this.password = password;
         this.rol = rol;
-        this.almacenes = almacenes;
+        this.almacen = almacen;
     }
 
-    public User(Long id, String email, String nombre, String apellidos, String username, String password, Rol rol, Set<Almacen> almacenes) {
+    public User(Long id, String email, String nombre, String apellidos, String username, String password, Rol rol, Almacen almacen) {
         this.id = id;
         this.email = email;
         this.nombre = nombre;
@@ -94,7 +94,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.rol = rol;
-        this.almacenes = almacenes;
+        this.almacen = almacen;
     }
 
     public User(String email, String nombre, String apellidos, String username, String password, Rol rol) {
