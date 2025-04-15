@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AlmacenRepository extends JpaRepository<Almacen, Long> {
     Optional<Almacen> findByIdentificador(String identificador);
-    List<Almacen> findByEncargado(User encargado);
+    Optional<Almacen> findByEncargado(User encargado);
 }

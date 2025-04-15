@@ -49,6 +49,9 @@ public class AlmacenService {
         if(encargado.isEmpty())
             return customResponse.getBadRequest("Usuario no encontrado");
         User encargadoAux = encargado.get();
+        Optional<Almacen> foundAlmacen = repository.findByEncargado(encargadoAux);
+        if(foundAlmacen.isEmpty())
+            return customResponse.getBadRequest("El usuario no cuenta con ningún alamacen");
         return customResponse.getJSONResponse(repository.findByEncargado(encargadoAux));
     }
 

@@ -36,7 +36,6 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> login(LoginDto dto) {
-        System.out.println("banana");
         System.out.println(dto);
         try{
             User foundUser = useRepository.findByUsername(dto.getUsername());
@@ -49,6 +48,9 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = provider.generateToken(auth);
             SignedDto signedDto = new SignedDto(token, "Bearer", foundUser, foundUser.getRol());
+            if(dto.getUsername().equals(dto.getPassword()) ){
+                return customResponse.getLoginJSONResponse(signedDto, true);
+            }
             return customResponse.getJSONResponse(signedDto);
         }catch (Exception e){
             e.printStackTrace();

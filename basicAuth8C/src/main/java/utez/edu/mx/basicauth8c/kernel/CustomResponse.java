@@ -33,6 +33,18 @@ public class CustomResponse {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
+    public ResponseEntity<Map<String, Object>> getLoginJSONResponse(Object data, Boolean firstTime) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", "Operación exitosa");
+        body.put("status", "Ok");
+        body.put("firstLogin", firstTime);
+        if (data != null) {
+            body.put("data", data);
+        }
+
+        return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
     public ResponseEntity<String> getCreatedResponse(String message) {
         body = new HashMap<>();
         body.put("message", message);

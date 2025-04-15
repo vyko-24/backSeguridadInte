@@ -46,6 +46,7 @@ public class UserService {
         User user1 = repository.findByUsername(user.getUsername());
         if(user1 != null)
             return response.getBadRequest("Usuario ya registrado");
+        user.setPassword(user.getUsername());
         return response.getJSONResponse(repository.save(user));
     }
 
