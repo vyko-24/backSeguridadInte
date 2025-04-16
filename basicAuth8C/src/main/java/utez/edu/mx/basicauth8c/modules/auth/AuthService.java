@@ -51,7 +51,7 @@ public class AuthService {
             if(dto.getUsername().equals(dto.getPassword()) ){
                 return customResponse.getLoginJSONResponse(signedDto, true);
             }
-            return customResponse.getJSONResponse(signedDto);
+            return customResponse.getLoginJSONResponse(signedDto, false);
         }catch (Exception e){
             e.printStackTrace();
             return customResponse.get400Response(400);
