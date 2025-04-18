@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
@@ -27,10 +28,12 @@ public class AuthService {
 
     private final AuthenticationManager manager;
     private final JwtProvider provider;
+    private final PasswordEncoder encoder;
 
-    public AuthService(AuthenticationManager manager, JwtProvider provider) {
+    public AuthService(AuthenticationManager manager, JwtProvider provider, PasswordEncoder encoder) {
         this.manager = manager;
         this.provider = provider;
+        this.encoder = encoder;
     }
 
 
@@ -69,12 +72,12 @@ public class AuthService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updatePassword(Long id, String password){
+    public ResponseEntity<?> updatePassword(Long id, LoginDto coso){
         Optional<User> foundUser = useRepository.findById(id);
         if (!foundUser.isPresent())
             return customResponse.get400Response(404);
         User user = foundUser.get();
-        user.setPassword(password);
+        user.setPassword(encoder.encode(coso.getPassword()));
         return customResponse.getJSONResponse(useRepository.save(user));
     }
 }

@@ -22,7 +22,7 @@ public class AuthController {
     }
 
     @PutMapping("/updatePassword/{id}")
-    public ResponseEntity<?> updatePassword(@PathVariable("id") Long id, @RequestBody String password){
-        return authService.updatePassword(id, password);
+    public ResponseEntity<?> updatePassword(@PathVariable("id") Long id, @RequestBody LoginDto coso){
+        return authService.updatePassword(id, coso);
     }
 }
