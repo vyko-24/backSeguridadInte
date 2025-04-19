@@ -3,6 +3,7 @@ package utez.edu.mx.basicauth8c.modules.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import utez.edu.mx.basicauth8c.modules.auth.AuthService;
 
 @RestController
 @RequestMapping("/api/user")
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/get/")
     public ResponseEntity<?> getAll(){
@@ -23,7 +27,7 @@ public class UserController {
 
     @PostMapping("/save/")
     public ResponseEntity<?> save(@RequestBody UserDto user){
-        return userService.save(user.toEntity());
+        return authService.save(user.toEntity());
     }
 
     @PutMapping("/update/{id}/")

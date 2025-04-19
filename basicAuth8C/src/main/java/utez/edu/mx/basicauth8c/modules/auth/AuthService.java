@@ -69,7 +69,7 @@ public class AuthService {
         if (!foundUser.isPresent())
             return customResponse.get400Response(404);
         User user = foundUser.get();
-        user.setPassword(user.getUsername());
+        user.setPassword(encoder.encode(user.getUsername()));
         return customResponse.getJSONResponse(useRepository.save(user));
     }
 
@@ -80,6 +80,19 @@ public class AuthService {
             return customResponse.get400Response(404);
         User user = foundUser.get();
         user.setPassword(encoder.encode(coso.getPassword()));
+        return customResponse.getJSONResponse(useRepository.save(user));
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> save(User user){
+        if (useRepository.findByEmail(user.getEmail()).isPresent())
+            return customResponse.getBadRequest("Correo ya registrado");
+        User user1 = useRepository.findByUsername(user.getUsername());
+        if(user1 != null)
+            return customResponse.getBadRequest("Usuario ya registrado");
+        user.setPassword(encoder.encode(user.getUsername()));
+        user.setStatus(true);
         return customResponse.getJSONResponse(useRepository.save(user));
     }
 }

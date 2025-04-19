@@ -3,6 +3,7 @@ package utez.edu.mx.basicauth8c.modules.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
@@ -37,18 +38,6 @@ public class UserService {
         if (foundUser == null)
             return null;
         return foundUser;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> save(User user){
-        if (repository.findByEmail(user.getEmail()).isPresent())
-            return response.getBadRequest("Correo ya registrado");
-        User user1 = repository.findByUsername(user.getUsername());
-        if(user1 != null)
-            return response.getBadRequest("Usuario ya registrado");
-        user.setPassword(user.getUsername());
-        user.setStatus(true);
-        return response.getJSONResponse(repository.save(user));
     }
 
     @Transactional(rollbackFor = Exception.class)
