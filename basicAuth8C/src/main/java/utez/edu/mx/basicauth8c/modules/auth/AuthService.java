@@ -44,6 +44,8 @@ public class AuthService {
             User foundUser = useRepository.findByUsername(dto.getUsername());
             if (foundUser == null)
                 return customResponse.get400Response(404);
+            if(!foundUser.getStatus())
+                return customResponse.getBadRequest("Usuario inactivo");
             Authentication auth = manager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
             );

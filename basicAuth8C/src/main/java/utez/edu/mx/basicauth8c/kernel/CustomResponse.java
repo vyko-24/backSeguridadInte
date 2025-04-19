@@ -61,6 +61,7 @@ public class CustomResponse {
         return new ResponseEntity<>(body.toString(), code == 400 ? HttpStatus.BAD_REQUEST : HttpStatus.NOT_FOUND);
     }
 
+
     public ResponseEntity<String> getBadRequest(String message) {
         body = new HashMap<>();
         body.put("message", message);
