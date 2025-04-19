@@ -7,6 +7,7 @@ import utez.edu.mx.basicauth8c.modules.articulo.ArticuloDto;
 
 @RestController
 @RequestMapping("/api/almacen")
+@CrossOrigin("*")
 public class AlmacenController {
     @Autowired
     private AlmacenService almacenService;
