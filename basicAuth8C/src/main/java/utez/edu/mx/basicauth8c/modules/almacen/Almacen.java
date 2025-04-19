@@ -26,7 +26,7 @@ public class Almacen {
 
     @OneToOne
     @JoinColumn(name = "encargado_id", nullable = false)
-    @JsonIgnoreProperties(value = {"almacenes","password","rol"})
+    @JsonIgnoreProperties(value = {"almacen","password","rol"})
     private User encargado;
 
     @Column(name = "identificador", nullable = false)

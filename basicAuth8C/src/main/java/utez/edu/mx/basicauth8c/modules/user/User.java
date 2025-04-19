@@ -39,6 +39,7 @@ public class User {
     private Rol rol ;
 
     @OneToOne(mappedBy = "encargado", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"encargado","categorias","almacen","articulos"})
     private Almacen almacen;
 
     @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
@@ -129,14 +130,6 @@ public class User {
     }
 
     public User() {
-    }
-
-    public Almacen getAlmacenes() {
-        return almacen;
-    }
-
-    public void setAlmacenes(Almacen almacenes) {
-        this.almacen = almacenes;
     }
 
     public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Almacen almacen) {
