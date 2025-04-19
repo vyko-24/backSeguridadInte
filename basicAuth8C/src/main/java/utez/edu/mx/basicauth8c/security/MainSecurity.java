@@ -72,6 +72,9 @@ public class MainSecurity implements WebMvcConfigurer {
     private final static String[] WHITE_LIST ={
             "/api/test",
             "/api/auth/login",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**"
     };
 
     private final static String[] ADMIN_LIST ={
