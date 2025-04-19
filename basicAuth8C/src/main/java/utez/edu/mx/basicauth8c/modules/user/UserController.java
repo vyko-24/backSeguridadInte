@@ -31,6 +31,11 @@ public class UserController {
         return userService.update(user.toEntity(), id);
     }
 
+    @PutMapping("/changeStatus/{id}/")
+    public ResponseEntity<?> changeStatus(@PathVariable("id") Long id){
+        return userService.changeStatus(id);
+    }
+
     @DeleteMapping("/delete/{id}/")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
         return userService.delete(id);

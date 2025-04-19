@@ -41,6 +41,69 @@ public class User {
     @OneToOne(mappedBy = "encargado", cascade = CascadeType.ALL)
     private Almacen almacen;
 
+    @Column(name = "status", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean status;
+
+    public User(Long id, String email, String nombre, String apellidos, String username, String password, Rol rol, Almacen almacen, Boolean status) {
+        this.id = id;
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.almacen = almacen;
+        this.status = status;
+    }
+
+    public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Boolean status) {
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.status = status;
+    }
+
+    public User(Long id, String email, String nombre, String apellidos, String username, String password, Rol rol, Boolean status) {
+        this.id = id;
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.status = status;
+    }
+
+    public User(String email, String nombre, String apellidos, String username, String password, Rol rol, Almacen almacen, Boolean status) {
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+        this.almacen = almacen;
+        this.status = status;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Almacen getAlmacen() {
+        return almacen;
+    }
+
+    public void setAlmacen(Almacen almacen) {
+        this.almacen = almacen;
+    }
+
     public String getEmail() {
         return email;
     }

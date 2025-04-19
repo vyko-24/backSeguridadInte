@@ -16,9 +16,18 @@ public class UserDto {
     private String username;
     private String password;
     private Rol rol ;
+    private Boolean status;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public User toEntity(){
-        return new User(id, email, nombre, apellidos, username, password, rol);
+        return new User(id, email, nombre, apellidos, username, password, rol, status);
     }
 
     public UserDto() {

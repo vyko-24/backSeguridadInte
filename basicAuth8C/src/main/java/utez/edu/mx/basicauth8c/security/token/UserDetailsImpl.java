@@ -13,11 +13,13 @@ import java.util.Set;
 public class UserDetailsImpl implements UserDetails {
     private String username;
     private String password;
+    private boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String username, String password, boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
+        this.enabled = enabled;
         this.authorities = authorities;
     }
 
@@ -26,6 +28,7 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getUsername(),
                 user.getPassword(),
+                user.getStatus(),
                 grantedAuthorities
         );
     }
@@ -53,6 +56,11 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
 }

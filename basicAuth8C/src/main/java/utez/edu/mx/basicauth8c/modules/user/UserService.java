@@ -47,6 +47,7 @@ public class UserService {
         if(user1 != null)
             return response.getBadRequest("Usuario ya registrado");
         user.setPassword(user.getUsername());
+        user.setStatus(true);
         return response.getJSONResponse(repository.save(user));
     }
 
@@ -62,6 +63,16 @@ public class UserService {
         user1.setUsername(user.getUsername());
 
         return response.getJSONResponse(repository.saveAndFlush(user1));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> changeStatus(Long id){
+        Optional<User> foundUser = repository.findById(id);
+        if(foundUser.isEmpty())
+            return response.getBadRequest("Usuario no encontrado");
+        User user = foundUser.get();
+        user.setStatus(!user.getStatus());
+        return response.getJSONResponse(repository.saveAndFlush(user));
     }
 
     @Transactional(rollbackFor = Exception.class)
