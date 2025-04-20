@@ -69,6 +69,8 @@ public class UserService {
         Optional<User> foundUser = repository.findById(id);
         if(foundUser.isEmpty())
             return response.getBadRequest("Usuario no encontrado");
+        if(foundUser.get().getAlmacen() != null)
+            return response.getBadRequest("El usuario tiene un almacen asignado. Por favor elimine el almacen o cambie de encargado");
         repository.deleteById(id);
         return response.getJSONResponse("Usuario eliminado");
     }
