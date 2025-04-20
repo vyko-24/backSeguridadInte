@@ -70,22 +70,22 @@ public class AlmacenService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> update(Almacen almacen, Long id){
-        if(!repository.existsById(id))
-            return customResponse.getBadRequest("Almacen no encontrado");
         Optional<Almacen> almacenFound = repository.findById(id);
         if(almacenFound.isEmpty())
             return customResponse.getBadRequest("Almacen no encontrado");
-        Almacen almacen1 = almacenFound.get();
-        User encargado = userRepository.findById(almacen.getEncargado().getId()).get();
-        if (encargado == null)
+        Optional<User> encargadoFound = userRepository.findById(almacen.getEncargado().getId());
+        if (encargadoFound.isEmpty())
             return customResponse.getBadRequest("Usuario no encontrado");
-        Categoria categoria = categoriaRepository.findById(almacen.getCategoria().getId()).get();
-        if (categoria == null)
+        if(encargadoFound.get().getAlmacen()!= null)
+            return customResponse.getBadRequest("El usuario ya tiene un almacen asignado");
+        Optional<Categoria> categoria = categoriaRepository.findById(almacen.getCategoria().getId());
+        if (categoria.isEmpty())
             return customResponse.getBadRequest("Categoria no encontrada");
+        Almacen almacen1 = almacenFound.get();
         almacen1.setIdentificador(almacen.getIdentificador());
         almacen1.setEncargado(almacen.getEncargado());
         almacen1.setCategoria(almacen.getCategoria());
-        return customResponse.getJSONResponse(repository.save(almacen));
+        return customResponse.getJSONResponse(repository.save(almacen1));
     }
 
     @Transactional(rollbackFor = Exception.class)
