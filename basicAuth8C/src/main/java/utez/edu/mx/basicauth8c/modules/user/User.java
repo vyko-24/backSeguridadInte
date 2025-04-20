@@ -1,5 +1,6 @@
 package utez.edu.mx.basicauth8c.modules.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import utez.edu.mx.basicauth8c.modules.almacen.Almacen;
@@ -31,6 +32,7 @@ public class User {
     private String username;
 
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
 
     @ManyToOne

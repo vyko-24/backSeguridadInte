@@ -1,5 +1,6 @@
 package utez.edu.mx.basicauth8c.modules.almacen;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -7,11 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
 import utez.edu.mx.basicauth8c.modules.articulo.Articulo;
 import utez.edu.mx.basicauth8c.modules.articulo.ArticuloRepository;
+import utez.edu.mx.basicauth8c.modules.bitacora.Bitacora;
+import utez.edu.mx.basicauth8c.modules.bitacora.BitacoraRepository;
+import utez.edu.mx.basicauth8c.modules.bitacora.BitacoraService;
 import utez.edu.mx.basicauth8c.modules.categoria.Categoria;
 import utez.edu.mx.basicauth8c.modules.categoria.CategoriaRepository;
 import utez.edu.mx.basicauth8c.modules.user.User;
 import utez.edu.mx.basicauth8c.modules.user.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -23,6 +28,9 @@ public class AlmacenService {
     private CustomResponse customResponse;
 
     @Autowired
+    private BitacoraService bitacoraService;
+
+    @Autowired
     private ArticuloRepository articuloRepository;
 
     @Autowired
@@ -31,20 +39,23 @@ public class AlmacenService {
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> getAll(){
+        bitacoraService.registrarBitacora("GET", "almacen", null, null);
         return customResponse.getJSONResponse(repository.findAll());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> getById(Long id){
+        bitacoraService.registrarBitacora("GET", "almacen", null, null);
         if(!repository.existsById(id))
             return customResponse.getBadRequest("Almacen no encontrado");
         return customResponse.getJSONResponse(repository.findById(id));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> getByEncargado(Long id){
+        bitacoraService.registrarBitacora("GET", "almacen", null, null);
         Optional<User> encargado = userRepository.findById(id);
         if(encargado.isEmpty())
             return customResponse.getBadRequest("Usuario no encontrado");
@@ -65,6 +76,7 @@ public class AlmacenService {
         Categoria categoria = categoriaRepository.findById(almacen.getCategoria().getId()).get();
         if (categoria == null)
             return customResponse.getBadRequest("Categoria no encontrada");
+        bitacoraService.registrarBitacora("POST", "almacen", null, almacen);
         return customResponse.getJSONResponse(repository.save(almacen));
     }
 
@@ -82,10 +94,19 @@ public class AlmacenService {
         if (categoria.isEmpty())
             return customResponse.getBadRequest("Categoria no encontrada");
         Almacen almacen1 = almacenFound.get();
+        Almacen copiaAntes = almacenFound.get();
         almacen1.setIdentificador(almacen.getIdentificador());
         almacen1.setEncargado(almacen.getEncargado());
         almacen1.setCategoria(almacen.getCategoria());
-        return customResponse.getJSONResponse(repository.save(almacen1));
+        repository.save(almacen1);
+
+        bitacoraService.registrarBitacora(
+                "PUT",
+                "almacen",
+                copiaAntes,
+                almacen1
+        );
+        return customResponse.getJSONResponse(almacen1);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -97,6 +118,13 @@ public class AlmacenService {
         if (almacen.getArticulos() != null && !almacen.getArticulos().isEmpty())
             return customResponse.getBadRequest("El almacén tiene artículos asignados. Por favor elimine los artículos o cambie de almacén");
         repository.deleteById(id);
+        // Registrar la eliminación en la bitácora
+        bitacoraService.registrarBitacora(
+                "DELETE",
+                "almacen",
+                almacen,
+                null
+        );
         return customResponse.getJSONResponse("Almacen eliminado");
     }
 
@@ -120,6 +148,13 @@ public class AlmacenService {
         // Agregar el artículo a la lista del almacén y guardar
         almacen.getArticulos().add(articulo);
         repository.save(almacen);
+        // Registrar la creación del artículo en la bitácora
+        bitacoraService.registrarBitacora(
+                "POST",
+                "articulo",
+                null,
+                articulo
+        );
         return customResponse.getJSONResponse(almacen);
     }
 
@@ -135,6 +170,14 @@ public class AlmacenService {
         Articulo articulo = articuloFound.get();
         almacen.getArticulos().remove(articulo);
 
+        // Registrar la eliminación del artículo en la bitácora
+        bitacoraService.registrarBitacora(
+                "DELETE",
+                "articulo",
+                articulo,
+                null
+        );
         return customResponse.getJSONResponse(repository.save(almacen));
     }
+
 }

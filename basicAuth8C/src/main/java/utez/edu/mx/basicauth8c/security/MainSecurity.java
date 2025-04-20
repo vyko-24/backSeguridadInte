@@ -86,6 +86,7 @@ public class MainSecurity implements WebMvcConfigurer {
             "/api/almacen/update/**",
             "/api/almacen/delete/**",
             "/api/auth/regresarContrasena/**",
+            "/api/bitacora/**",
     };
     private final static String[] MERGE_LIST ={
             "/api/almacen/createArticulo/**",

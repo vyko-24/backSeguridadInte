@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
+import utez.edu.mx.basicauth8c.modules.bitacora.BitacoraService;
 import utez.edu.mx.basicauth8c.modules.user.User;
 import utez.edu.mx.basicauth8c.modules.user.UserRepository;
 import utez.edu.mx.basicauth8c.security.token.JwtProvider;
@@ -25,6 +26,9 @@ public class AuthService {
     @Autowired
     private CustomResponse customResponse;
 
+    @Autowired
+    private BitacoraService bitacoraService;
+
 
     private final AuthenticationManager manager;
     private final JwtProvider provider;
@@ -37,7 +41,7 @@ public class AuthService {
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> login(LoginDto dto) {
         System.out.println(dto);
         try{
@@ -53,6 +57,7 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = provider.generateToken(auth);
             SignedDto signedDto = new SignedDto(token, "Bearer", foundUser, foundUser.getRol());
+            bitacoraService.registrarBitacora("LOGIN", "user", null, foundUser);
             if(dto.getUsername().equals(dto.getPassword()) ){
                 return customResponse.getLoginJSONResponse(signedDto, true);
             }
@@ -70,6 +75,7 @@ public class AuthService {
             return customResponse.get400Response(404);
         User user = foundUser.get();
         user.setPassword(encoder.encode(user.getUsername()));
+        bitacoraService.registrarBitacora("PUT", "user", null, user);
         return customResponse.getJSONResponse(useRepository.save(user));
     }
 
@@ -93,6 +99,7 @@ public class AuthService {
             return customResponse.getBadRequest("Usuario ya registrado");
         user.setPassword(encoder.encode(user.getUsername()));
         user.setStatus(true);
+        bitacoraService.registrarBitacora("POST", "user", null, user);
         return customResponse.getJSONResponse(useRepository.save(user));
     }
 }

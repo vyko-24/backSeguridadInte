@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.basicauth8c.kernel.CustomResponse;
+import utez.edu.mx.basicauth8c.modules.bitacora.BitacoraService;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -20,19 +21,24 @@ public class UserService {
     @Autowired
     private CustomResponse response;
 
-    @Transactional(readOnly = true)
+    @Autowired
+    private BitacoraService bitacoraService;
+
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> getAll(){
+        bitacoraService.registrarBitacora("GET", "usuario", null, null);
         return response.getJSONResponse(repository.findAll());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> getById(Long id){
         if(!repository.existsById(id))
             return response.getBadRequest("Usuario no encontrado");
+        bitacoraService.registrarBitacora("GET", "usuario", null, null);
         return response.getJSONResponse(repository.findById(id));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = Exception.class)
     public User findUserByUsername(String username) {
         User foundUser = repository.findByUsername(username);
         if (foundUser == null)
@@ -46,12 +52,15 @@ public class UserService {
         if(foundUser.isEmpty())
             return response.getBadRequest("Usuario no encontrado");
         User user1 = foundUser.get();
+        User user2 = foundUser.get();
         user1.setEmail(user.getEmail());
         user1.setNombre(user.getNombre());
         user1.setApellidos(user.getApellidos());
         user1.setUsername(user.getUsername());
+        repository.save(user1);
+        bitacoraService.registrarBitacora("PUT", "usuario", user2, user1);
 
-        return response.getJSONResponse(repository.saveAndFlush(user1));
+        return response.getJSONResponse(user1);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -60,8 +69,11 @@ public class UserService {
         if(foundUser.isEmpty())
             return response.getBadRequest("Usuario no encontrado");
         User user = foundUser.get();
+        User user2 = foundUser.get();
         user.setStatus(!user.getStatus());
-        return response.getJSONResponse(repository.saveAndFlush(user));
+        repository.saveAndFlush(user);
+        bitacoraService.registrarBitacora("PUT", "usuario", user2, user);
+        return response.getJSONResponse(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -71,6 +83,8 @@ public class UserService {
             return response.getBadRequest("Usuario no encontrado");
         if(foundUser.get().getAlmacen() != null)
             return response.getBadRequest("El usuario tiene un almacen asignado. Por favor elimine el almacen o cambie de encargado");
+        User user = foundUser.get();
+        bitacoraService.registrarBitacora("DELETE", "usuario", user, null);
         repository.deleteById(id);
         return response.getJSONResponse("Usuario eliminado");
     }
