@@ -54,7 +54,14 @@ public class ArticuloService {
         if (repository.findByNombre(articulo.getNombre()).isPresent())
             return customResponse.getBadRequest("Articulo ya registrado");
         bitacoraService.registrarBitacora("POST", "articulo", null, articulo);
-        return customResponse.getJSONResponse(repository.save(articulo));
+        Optional<Almacen> almacen = almacenRepository.findById(articulo.getAlmacenes().get(0).getId());
+        if(almacen.isEmpty())
+            return customResponse.getBadRequest("Almacen no encontrado");
+        Almacen almacenAux = almacen.get();
+        repository.save(articulo);
+        almacenAux.getArticulos().add(articulo);
+        almacenRepository.saveAndFlush(almacenAux);
+        return customResponse.getJSONResponse(articulo);
     }
 
     @Transactional(rollbackFor = Exception.class)

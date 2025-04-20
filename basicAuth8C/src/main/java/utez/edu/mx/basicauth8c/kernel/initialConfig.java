@@ -93,8 +93,8 @@ public class initialConfig implements CommandLineRunner {
 
         User userAdmin = getOrSaveUser(new User("admin@gmail.com","Víctor","Barrera","Viko",encoder.encode("1234"),admin, true));
         User userResponsable = getOrSaveUser(new User( "responsable@gmail.com","Vale","Hernandez","Titian",encoder.encode("1234"),responsable, true));
-        User userResponsable2 = getOrSaveUser(new User( "nuevo@gmail.com","Cris","Sanchez","NewUser",encoder.encode("NewUser"),responsable, true));
-        User userBlocked = getOrSaveUser(new User( "bloqueado@gmail.com","Cris","Sanchez","BlockedUser",encoder.encode("BlockedUser"),responsable, false));
+        User userResponsable2 = getOrSaveUser(new User( "nuevo@gmail.com","Cris","Sanchez","NewUser",encoder.encode("1234"),responsable, true));
+        User userBlocked = getOrSaveUser(new User( "bloqueado@gmail.com","Cris","Sanchez","BlockedUser",encoder.encode("1234"),responsable, false));
 
         Categoria categoria = getOrSaveCategoria(new Categoria("Electronica"));
         Articulo articulo1 = getOrSaveArticulo(new Articulo("Laptop","Laptop HP",categoria));
