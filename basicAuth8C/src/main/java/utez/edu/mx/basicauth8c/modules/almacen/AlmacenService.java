@@ -90,8 +90,12 @@ public class AlmacenService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> delete(Long id){
-        if(!repository.existsById(id))
+        Optional<Almacen> almacenFound = repository.findById(id);
+        if(almacenFound.isEmpty())
             return customResponse.getBadRequest("Almacen no encontrado");
+        Almacen almacen = almacenFound.get();
+        if (almacen.getArticulos() != null && !almacen.getArticulos().isEmpty())
+            return customResponse.getBadRequest("El almacén tiene artículos asignados. Por favor elimine los artículos o cambie de almacén");
         repository.deleteById(id);
         return customResponse.getJSONResponse("Almacen eliminado");
     }

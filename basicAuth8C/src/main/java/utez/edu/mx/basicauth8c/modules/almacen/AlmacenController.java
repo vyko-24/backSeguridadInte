@@ -46,4 +46,9 @@ public class AlmacenController {
     public ResponseEntity<?> createArticulo(@RequestBody ArticuloDto articulo, @PathVariable("idAlmacen") Long idAlmacen){
         return almacenService.createArticulo(articulo.toEntity(), idAlmacen);
     }
+
+    @PutMapping("/removeArticulo/{idAlmacen}/{idArticulo}/")
+    public ResponseEntity<?> deleteArticulo(@PathVariable("idAlmacen") Long idAlmacen, @PathVariable("idArticulo") Long idArticulo){
+        return almacenService.removeArticulo(idAlmacen, idArticulo);
+    }
 }
