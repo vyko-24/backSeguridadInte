@@ -74,8 +74,22 @@ public class ArticuloService {
         articulo1.setNombre(articulo.getNombre());
         articulo1.setDescripcion(articulo.getDescripcion());
         articulo1.setCategoria(articulo.getCategoria());
+        Optional<Almacen> foundalmacenprevio = almacenRepository.findById(articulo1.getAlmacenes().get(0).getId());
+        Almacen almacenprevio = foundalmacenprevio.get();
+        if(almacenprevio.getArticulos().contains(articulo1)){
+            almacenprevio.getArticulos().remove(articulo1);
+        }
+        //elimnar el articulo del almacen previo
+        almacenRepository.saveAndFlush(almacenprevio);
+
         articulo1.setAlmacenes(articulo.getAlmacenes());
+        Optional<Almacen> almacen = almacenRepository.findById(articulo.getAlmacenes().get(0).getId());
+        if(almacen.isEmpty())
+            return customResponse.getBadRequest("Almacen no encontrado");
+        Almacen almacenAux = almacen.get();
         repository.save(articulo1);
+        almacenAux.getArticulos().add(articulo1);
+        almacenRepository.saveAndFlush(almacenAux);
         bitacoraService.registrarBitacora("POST", "articulo", articulo2, articulo);
 
         return customResponse.getJSONResponse(articulo1);
@@ -87,8 +101,13 @@ public class ArticuloService {
         if(articulo.isEmpty())
             return customResponse.getBadRequest("Articulo no encontrado");
         Articulo articulo1 = articulo.get();
+        for (Almacen almacen : articulo1.getAlmacenes()) {
+            almacen.getArticulos().remove(articulo1);
+            almacenRepository.saveAndFlush(almacen);
+        }
+        articulo1.setAlmacenes(null);
         bitacoraService.registrarBitacora("DELETE", "articulo", articulo1, null);
-        repository.deleteById(id);
+        repository.delete(articulo1);
         return customResponse.getJSONResponse("Articulo eliminado");
     }
 }
