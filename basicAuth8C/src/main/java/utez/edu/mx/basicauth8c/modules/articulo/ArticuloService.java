@@ -8,6 +8,9 @@ import utez.edu.mx.basicauth8c.kernel.CustomResponse;
 import utez.edu.mx.basicauth8c.modules.almacen.Almacen;
 import utez.edu.mx.basicauth8c.modules.almacen.AlmacenRepository;
 import utez.edu.mx.basicauth8c.modules.bitacora.BitacoraService;
+import utez.edu.mx.basicauth8c.modules.user.User;
+import utez.edu.mx.basicauth8c.modules.user.UserRepository;
+import utez.edu.mx.basicauth8c.modules.user.UserService;
 
 import java.util.Optional;
 
@@ -21,6 +24,9 @@ public class ArticuloService {
 
     @Autowired
     private AlmacenRepository almacenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private BitacoraService bitacoraService;
@@ -109,5 +115,21 @@ public class ArticuloService {
         bitacoraService.registrarBitacora("DELETE", "articulo", articulo1, null);
         repository.delete(articulo1);
         return customResponse.getJSONResponse("Articulo eliminado");
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> findByEncargado(Long id){
+        Optional< User> user = userRepository.findById(id);
+        if(user.isEmpty())
+            return customResponse.getBadRequest("Usuario no encontrado");
+        User userAux = user.get();
+        Optional<Almacen> almacen = almacenRepository.findByEncargado(userAux);
+        if(almacen.isEmpty())
+            return customResponse.getBadRequest("Almacen no encontrado");
+        Almacen almacenAux = almacen.get();
+        if(almacenAux.getArticulos().isEmpty())
+            return customResponse.getBadRequest("No hay articulos en el almacen");
+        bitacoraService.registrarBitacora("GET", "articulo", null, null);
+        return customResponse.getJSONResponse(repository.findByAlmacenes(almacenAux));
     }
 }

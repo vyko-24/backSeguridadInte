@@ -26,6 +26,11 @@ public class ArticuloController {
         return articuloService.getByAlmacen(id);
     }
 
+    @GetMapping("/get/almacen/encargado/{id}/")
+    public ResponseEntity<?> getByAlmacenEncargado(@PathVariable("id") Long id){
+        return articuloService.findByEncargado(id);
+    }
+
     @PostMapping("/save/")
     public ResponseEntity<?> save(@RequestBody ArticuloDto articulo){
         return articuloService.save(articulo.toEntity());
