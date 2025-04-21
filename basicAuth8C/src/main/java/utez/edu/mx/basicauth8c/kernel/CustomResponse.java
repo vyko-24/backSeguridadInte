@@ -34,6 +34,7 @@ public class CustomResponse {
     }
 
     public ResponseEntity<Map<String, Object>> getLoginJSONResponse(Object data, Boolean firstTime) {
+        System.out.println("data: " + data);
         Map<String, Object> body = new HashMap<>();
         body.put("message", "Operación exitosa");
         body.put("status", "Ok");

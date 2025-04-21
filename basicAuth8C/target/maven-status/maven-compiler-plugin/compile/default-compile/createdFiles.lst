@@ -2,6 +2,7 @@ utez\edu\mx\basicauth8c\security\token\JwtAuthentication.class
 utez\edu\mx\basicauth8c\kernel\initialConfig.class
 utez\edu\mx\basicauth8c\modules\almacen\AlmacenService.class
 utez\edu\mx\basicauth8c\modules\auth\RolDto.class
+utez\edu\mx\basicauth8c\modules\bitacora\BitacoraService.class
 utez\edu\mx\basicauth8c\modules\rol\RolController.class
 utez\edu\mx\basicauth8c\modules\TestController.class
 utez\edu\mx\basicauth8c\security\MainSecurity.class
@@ -17,6 +18,8 @@ utez\edu\mx\basicauth8c\modules\user\UserRepository.class
 utez\edu\mx\basicauth8c\modules\almacen\AlmacenDto.class
 utez\edu\mx\basicauth8c\modules\user\UserDto.class
 utez\edu\mx\basicauth8c\modules\articulo\ArticuloRepository.class
+utez\edu\mx\basicauth8c\modules\bitacora\BitacoraController.class
+utez\edu\mx\basicauth8c\modules\bitacora\BitacoraRepository.class
 utez\edu\mx\basicauth8c\modules\rol\RoleService.class
 utez\edu\mx\basicauth8c\modules\articulo\Articulo.class
 utez\edu\mx\basicauth8c\security\token\UserDetailsImpl.class
@@ -38,4 +41,5 @@ utez\edu\mx\basicauth8c\security\token\UserDetailsServiceImpl.class
 utez\edu\mx\basicauth8c\modules\almacen\AlmacenRepository.class
 utez\edu\mx\basicauth8c\modules\categoria\Categoria.class
 utez\edu\mx\basicauth8c\security\filters\AuthFilter.class
+utez\edu\mx\basicauth8c\modules\bitacora\Bitacora.class
 utez\edu\mx\basicauth8c\modules\user\User.class

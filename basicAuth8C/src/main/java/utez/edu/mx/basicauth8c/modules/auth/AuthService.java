@@ -43,6 +43,7 @@ public class AuthService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> login(LoginDto dto) {
+        System.out.println("banana1");
         System.out.println(dto);
         try{
             User foundUser = useRepository.findByUsername(dto.getUsername());
@@ -53,14 +54,19 @@ public class AuthService {
             Authentication auth = manager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
             );
-            System.out.println(dto);
+            System.out.println("banana2");
             SecurityContextHolder.getContext().setAuthentication(auth);
+            System.out.println("banana3");
             String token = provider.generateToken(auth);
+            System.out.println("banana");
             SignedDto signedDto = new SignedDto(token, "Bearer", foundUser, foundUser.getRol());
+            System.out.println("banana5");
             bitacoraService.registrarBitacora("LOGIN", "user", null, foundUser);
             if(dto.getUsername().equals(dto.getPassword()) ){
                 return customResponse.getLoginJSONResponse(signedDto, true);
             }
+            System.out.println("banana6");
+            System.out.println(customResponse.getLoginJSONResponse(signedDto, false));
             return customResponse.getLoginJSONResponse(signedDto, false);
         }catch (Exception e){
             e.printStackTrace();
