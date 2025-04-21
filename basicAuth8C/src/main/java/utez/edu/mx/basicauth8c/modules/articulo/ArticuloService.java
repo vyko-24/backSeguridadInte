@@ -64,6 +64,8 @@ public class ArticuloService {
         if(almacen.isEmpty())
             return customResponse.getBadRequest("Almacen no encontrado");
         Almacen almacenAux = almacen.get();
+        if(!almacenAux.getCategoria().getNombre().equalsIgnoreCase(articulo.getCategoria().getNombre()))
+            return customResponse.getBadRequest("La categoria no coincide con la del almacen");
         repository.save(articulo);
         almacenAux.getArticulos().add(articulo);
         almacenRepository.saveAndFlush(almacenAux);
@@ -86,6 +88,8 @@ public class ArticuloService {
             almacenprevio.getArticulos().remove(articulo1);
         }
         //elimnar el articulo del almacen previo
+        if(!almacenprevio.getCategoria().getNombre().equalsIgnoreCase(articulo.getCategoria().getNombre()))
+            return customResponse.getBadRequest("La categoria no coincide con la del almacen");
         almacenRepository.saveAndFlush(almacenprevio);
 
         articulo1.setAlmacenes(articulo.getAlmacenes());
