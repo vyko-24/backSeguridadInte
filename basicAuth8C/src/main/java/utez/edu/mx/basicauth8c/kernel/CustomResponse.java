@@ -33,12 +33,13 @@ public class CustomResponse {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    public ResponseEntity<Map<String, Object>> getLoginJSONResponse(Object data, Boolean firstTime) {
+    public ResponseEntity<Map<String, Object>> getLoginJSONResponse(Object data, Boolean firstTime, Boolean hasAlmacen) {
         System.out.println("data: " + data);
         Map<String, Object> body = new HashMap<>();
         body.put("message", "Operación exitosa");
         body.put("status", "Ok");
         body.put("firstLogin", firstTime);
+        body.put("hasAlmacen", hasAlmacen);
         if (data != null) {
             body.put("data", data);
         }

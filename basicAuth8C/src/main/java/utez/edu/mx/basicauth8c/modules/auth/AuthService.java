@@ -54,20 +54,19 @@ public class AuthService {
             Authentication auth = manager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
             );
-            System.out.println("banana2");
             SecurityContextHolder.getContext().setAuthentication(auth);
-            System.out.println("banana3");
             String token = provider.generateToken(auth);
-            System.out.println("banana");
             SignedDto signedDto = new SignedDto(token, "Bearer", foundUser, foundUser.getRol());
-            System.out.println("banana5");
             bitacoraService.registrarBitacora("LOGIN", "user", null, foundUser);
             if(dto.getUsername().equals(dto.getPassword()) ){
-                return customResponse.getLoginJSONResponse(signedDto, true);
+                if (foundUser.getAlmacen()==null)
+                    return customResponse.getLoginJSONResponse(signedDto, true, false);
+                return customResponse.getLoginJSONResponse(signedDto, true, true);
             }
-            System.out.println("banana6");
-            System.out.println(customResponse.getLoginJSONResponse(signedDto, false));
-            return customResponse.getLoginJSONResponse(signedDto, false);
+            if (foundUser.getAlmacen()==null)
+                return customResponse.getLoginJSONResponse(signedDto, false, false);
+
+            return customResponse.getLoginJSONResponse(signedDto, false, true);
         }catch (Exception e){
             e.printStackTrace();
             return customResponse.get400Response(400);
