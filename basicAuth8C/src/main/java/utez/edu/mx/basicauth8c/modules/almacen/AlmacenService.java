@@ -73,6 +73,8 @@ public class AlmacenService {
         User encargado = userRepository.findById(almacen.getEncargado().getId()).get();
         if (encargado == null)
             return customResponse.getBadRequest("Usuario no encontrado");
+        if(!encargado.getStatus())
+            return customResponse.getBadRequest("Usuario inactivo");
         Categoria categoria = categoriaRepository.findById(almacen.getCategoria().getId()).get();
         if (categoria == null)
             return customResponse.getBadRequest("Categoria no encontrada");
@@ -88,6 +90,8 @@ public class AlmacenService {
         Optional<User> encargadoFound = userRepository.findById(almacen.getEncargado().getId());
         if (encargadoFound.isEmpty())
             return customResponse.getBadRequest("Usuario no encontrado");
+        if(!encargadoFound.get().getStatus())
+            return customResponse.getBadRequest("Usuario inactivo");
         if(encargadoFound.get().getAlmacen()!= null)
             return customResponse.getBadRequest("El usuario ya tiene un almacen asignado");
         Optional<Categoria> categoria = categoriaRepository.findById(almacen.getCategoria().getId());
